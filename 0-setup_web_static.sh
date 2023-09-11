@@ -2,10 +2,8 @@
 # Sets up my web servers for the deployment of `web_static`.
 
 sudo -i
-if [[ "$(which nginx | grep -c nginx)" == '0' ]]; then
-    apt-get -y update
-    apt-get -y install nginx
-fi
+apt-get -y update
+apt-get -y install nginx
 
 mkdir -p /data/web_static/releases/test /data/web_static/shared
 printf %s "<html>
@@ -16,12 +14,13 @@ printf %s "<html>
 	</body>
 </html>" > /data/web_static/releases/test/index.html
 
-[ -d /data/web_static/current ] && rm /data/web_static/current
+[ -d /data/web_static/current ] && rm -rf /data/web_static/current
 ln -sf /data/web_static/releases/test/ /data/web_static/current
 chown -hR ubuntu:ubuntu /data
 
 echo 'Hello World!' > /var/www/html/index.html
-echo "Ceci n'est pas une page" > /var/www/html/404.html
+mkdir -p /var/www/error/
+echo "Ceci n'est pas une page" > /var/www/error/404.html
 var=$(hostname)
 printf %s "server {
     listen 80;
@@ -34,7 +33,7 @@ printf %s "server {
     server_name _;
 
     location / {
-		root /var/www/html;
+		root /var/www/html/;
         try_files \$uri \$uri/ =404;
     }
 
@@ -45,7 +44,7 @@ printf %s "server {
 
     error_page 404 /404.html;
     location = /404.html {
-        root /var/www/html;
+        root /var/www/error/;
         internal;
     }
 }" > /etc/nginx/sites-available/default
