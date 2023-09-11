@@ -69,13 +69,11 @@ class HBNBCommand(cmd.Cmd):
                 # partition args: (<id>, [<delim>], [<*args>])
                 pline = pline.partition(', ')  # pline convert to tuple
 
-                # isolate _id, stripping quotes
-                _id = pline[0].replace('\"', '')
-                # possible bug here:
-                # empty quotes register as empty _id when replaced
+                # isolate _id
+                _id = pline[0]
 
                 # if arguments exist beyond _id
-                pline = pline[2].strip()  # pline is now str
+                pline = pline[2]
                 if pline:
                     # check for *args or **kwargs
                     if pline[0] == '{' and pline[-1] == '}'\
@@ -84,7 +82,16 @@ class HBNBCommand(cmd.Cmd):
                     else:
                         _args = pline.replace(',', '')
                         # _args = _args.replace('\"', '')
-            line = ' '.join([_cmd, _cls, _id, _args])
+
+            # if command is all or count
+            if _cmd == HBNBCommand.dot_cmds[0] or _cmd == HBNBCommand.dot_cmds[1]:
+                line = ' '.join([_cmd, _cls])
+            # if command is show or destroy
+            if _cmd == HBNBCommand.dot_cmds[2] or _cmd == HBNBCommand.dot_cmds[3]:
+                line = ' '.join([_cmd, _cls, _id])
+            # if command is update
+            if _cmd == HBNBCommand.dot_cmds[4]:
+                line = ' '.join([_cmd, _cls, _id, _args])
 
         except Exception as mess:
             pass
@@ -128,7 +135,7 @@ class HBNBCommand(cmd.Cmd):
             class_name = class_match.group('name')
             params_str = args[len(class_name):].strip()
             params = params_str.split(' ')
-            str_pattern = r'(?P<t_str>"([^"]|\")*")'
+            str_pattern = r'(?P<t_str>"([^"]|\")*"|\'([^\']|\')*\')'
             float_pattern = r'(?P<t_float>[-+]?\d+\.\d+)'
             int_pattern = r'(?P<t_int>[-+]?\d+)'
             param_pattern = '{}=({}|{}|{})'.format(
@@ -178,8 +185,9 @@ class HBNBCommand(cmd.Cmd):
 
     def help_create(self):
         """ Help information for the create method """
-        print("Creates a class of any type")
-        print("[Usage]: create <className>\n")
+        print("Creates a class of any type (with or without parameters)")
+        print("(*) means required")
+        print('[Usage]: create <class_name>* <param_name>="<param_value>"\n')
 
     def do_show(self, args):
         """ Method to show an individual object """
@@ -212,7 +220,8 @@ class HBNBCommand(cmd.Cmd):
     def help_show(self):
         """ Help information for the show command """
         print("Shows an individual instance of a class")
-        print("[Usage]: show <className> <objectId>\n")
+        print("(*) means required")
+        print("[Usage]: show <class_name>* <class_instance_id>*\n")
 
     def do_destroy(self, args):
         """ Destroys a specified object """
@@ -245,46 +254,58 @@ class HBNBCommand(cmd.Cmd):
     def help_destroy(self):
         """ Help information for the destroy command """
         print("Destroys an individual instance of a class")
-        print("[Usage]: destroy <className> <objectId>\n")
+        print("(*) means required")
+        print("[Usage]: destroy <class_name>* <class_instance_id>*\n")
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
-        print_list = []
-
+        class_objects = []
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
             for k, v in storage.all().items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+                if args == k.split('.')[0]:
+                    class_objects.append(str(v))
         else:
             for k, v in storage.all().items():
-                print_list.append(str(v))
+                class_objects.append(str(v))
 
-        print(print_list)
+        print(class_objects)
 
     def help_all(self):
         """ Help information for the all command """
-        print("Shows all objects, or all of a class")
-        print("[Usage]: all <className>\n")
+        print("Shows all instances or all the instances of an individual class")
+        print("(*) means required")
+        print("[Usage]: all <class_name>\n")
 
     def do_count(self, args):
         """Count current number of class instances"""
+        # isolate class_name from args
+        c_name = args.partition(" ")[0]
+        if not c_name:
+            print("** class name missing **")
+            return
+        if c_name not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+        
         count = 0
         for k, v in storage.all().items():
-            if args == k.split('.')[0]:
+            if c_name == k.split('.')[0]:
                 count += 1
         print(count)
 
     def help_count(self):
-        """ """
-        print("Usage: count <class_name>")
+        """ Help information for the count command """
+        print("Shows the number of instances of an individual class")
+        print("(*) means required")
+        print("Usage: count <class_name>*")
 
     def do_update(self, args):
         """ Updates a certain object with new info """
-        c_name = c_id = att_name = att_val = kwargs = ''
+        c_name = c_id = param_name = param_val = kwargs = ''
 
         # isolate cls from id/args, ex: (<cls>, delim, <id/args>)
         args = args.partition(" ")
@@ -320,55 +341,72 @@ class HBNBCommand(cmd.Cmd):
             for k, v in kwargs.items():
                 args.append(k)
                 args.append(v)
-        else:  # isolate args
-            args = args[2]
-            if args and args[0] == '\"':  # check for quoted arg
-                second_quote = args.find('\"', 1)
-                att_name = args[1:second_quote]
-                args = args[second_quote + 1:]
+        else:  # isolate param args
+            args = args[2].partition(" ")
+            # check for any relevant arg
+            if args[0]:
+                # check for irrelevant args in arg_checks
+                arg_checks = ["''", '""', "'", '"', "' ' '", '" " "']
+                if args[0] not in arg_checks:
+                    # check for double quoted param_name arg
+                    if args and args[0][0] == '"':
+                        second_quote = args[0].find('"', 1)
+                        param_name = args[0][1:second_quote]
+                    # check for single quoted param_name arg
+                    elif args and args[0][0] == "'":
+                        second_quote = args[0].find("'", 1)
+                        param_name = args[0][1:second_quote]
+                    # check for param_name arg without quote
+                    if not param_name and args[0] != " ":
+                        param_name = args[0]
+                else:
+                    print("** parameter name missing **")
+                    return
 
-            args = args.partition(' ')
-
-            # if att_name was not quoted arg
-            if not att_name and args[0] != ' ':
-                att_name = args[0]
-            # check for quoted val arg
-            if args[2] and args[2][0] == '\"':
-                att_val = args[2][1:args[2].find('\"', 1)]
-
-            # if att_val was not quoted arg
-            if not att_val and args[2]:
-                att_val = args[2].partition(' ')[0]
-
-            args = [att_name, att_val]
+                # check for irrelevant args in arg_checks
+                if args[2] and args[2] not in arg_checks:
+                    # check for double quoted param_val arg
+                    if args and args[2][0] == '"':
+                        second_quote = args[2].find('"', 1)
+                        param_val = args[2][1:second_quote]
+                    # check for single quoted param_val arg
+                    elif args and args[2][0] == "'":
+                        second_quote = args[2].find("'", 1)
+                        param_val = args[2][1:second_quote]
+                    # check for param_val arg without quote
+                    if not param_val and args[2] != " ":
+                        param_val = args[2].partition(" ")[0]
+                else:
+                    print("** parameter value missing **")
+                    return
+            else:
+                print("** parameter name and value missing **")
+                return
+            
+            args = [param_name, param_val]
 
         # retrieve dictionary of current objects
         new_dict = storage.all()[key]
 
         # iterate through attr names and values
-        for i, att_name in enumerate(args):
+        for index, param_name in enumerate(args):
             # block only runs on even iterations
-            if (i % 2 == 0):
-                att_val = args[i + 1]  # following item is value
-                if not att_name:  # check for att_name
-                    print("** attribute name missing **")
-                    return
-                if not att_val:  # check for att_value
-                    print("** value missing **")
-                    return
+            if (index % 2 == 0):
+                param_val = args[index + 1]  # following item is value
                 # type cast as necessary
-                if att_name in HBNBCommand.types:
-                    att_val = HBNBCommand.types[att_name](att_val)
+                if param_name in HBNBCommand.types:
+                    param_val = HBNBCommand.types[param_name](param_val)
 
                 # update dictionary with name, value pair
-                new_dict.__dict__.update({att_name: att_val})
+                new_dict.__dict__.update({param_name: param_val})
 
         new_dict.save()  # save updates to file
 
     def help_update(self):
         """ Help information for the update class """
-        print("Updates an object with new information")
-        print("Usage: update <className> <id> <attName> <attVal>\n")
+        print("Updates a parameter of an instance with new information")
+        print("(*) means required")
+        print("Usage: update <class_name>* <instance_id>* <param_name>* <param_value>*\n")
 
 
 if __name__ == "__main__":
