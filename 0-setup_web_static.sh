@@ -28,18 +28,17 @@ printf %s "server {
 
     add_header X-Served-By "$var";
 
+	root /var/www/html/;
     index index.html index.htm index.nginx-debian.html;
 
     server_name _;
 
     location / {
-		root /var/www/html/;
         try_files \$uri \$uri/ =404;
     }
 
 	location /hbnb_static/ {
         alias /data/web_static/current/;
-        try_files \$uri \$uri/ =404;
 	}
 
     error_page 404 /404.html;
