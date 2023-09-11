@@ -26,7 +26,7 @@ printf %s "server {
     listen 80;
     listen [::]:80 default_server;
 
-    add_header X-Served-By "$var";
+    add_header X-Served-By ""$var"";
 
 	root /var/www/html/;
     index index.html index.htm index.nginx-debian.html;
