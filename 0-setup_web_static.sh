@@ -22,7 +22,7 @@ echo 'Hello World!' > /var/www/html/index.html
 mkdir -p /var/www/error/
 echo "Ceci n'est pas une page" > /var/www/error/404.html
 var=$(hostname)
-printf %s "server {
+printf %s 'server {
     listen 80;
     listen [::]:80 default_server;
 
@@ -46,6 +46,6 @@ printf %s "server {
         root /var/www/error/;
         internal;
     }
-}" > /etc/nginx/sites-available/default
+}' > /etc/nginx/sites-available/default
 
 service nginx restart
