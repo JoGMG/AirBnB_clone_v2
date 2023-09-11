@@ -8,7 +8,9 @@ from models.base_model import BaseModel, Base
 from models.review import Review
 from models.amenity import Amenity
 
-
+""" Represents the many to many relationship table
+    between Place and Amenity.
+"""
 place_amenity = Table(
     'place_amenity',
     Base.metadata,
@@ -27,9 +29,6 @@ place_amenity = Table(
         primary_key=True
     )
 )
-"""Represents the many to many relationship table
-between Place and Amenity records.
-"""
 
 
 class Place(BaseModel, Base):
@@ -65,7 +64,6 @@ class Place(BaseModel, Base):
     longitude = Column(
         Float, nullable=True
     ) if os.getenv('HBNB_TYPE_STORAGE') == 'db' else 0.0
-    amenity_ids = []
     reviews = relationship(
         'Review',
         cascade="all, delete, delete-orphan",
@@ -79,22 +77,24 @@ class Place(BaseModel, Base):
             backref='place_amenities'
         )
     else:
+        amenity_ids = []
+
         @property
         def amenities(self):
             """Returns the amenities of this Place"""
-            from models import storage
-            amenities_of_place = []
-            for value in storage.all(Amenity).values():
-                if value.id in self.amenity_ids:
-                    amenities_of_place.append(value)
-            return amenities_of_place
+            # from models import storage
+            # amenities_of_place = []
+            # for value in storage.all(Amenity).values():
+            #     if value.id in self.amenity_ids:
+            #         amenities_of_place.append(value)
+            return self.amenity_ids
 
         @amenities.setter
         def amenities(self, value):
             """Adds an amenity to this Place"""
             if type(value) is Amenity:
                 if value.id not in self.amenity_ids:
-                    self.amenity_ids.append(value.id)
+                    self.amenity_ids = value.id
 
         @property
         def reviews(self):
