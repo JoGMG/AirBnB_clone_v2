@@ -1,10 +1,13 @@
 #!/usr/bin/python3
-""" A python script that generates and distributes a .tgz archive using Fabric. """
+""" A python script that generates and distributes a .tgz
+    archive using Fabric.
+"""
 import os
 from fabric.api import env, put, run
 
 """ Host server IP addresses to execute script """
 env.hosts = ["34.202.159.210", "54.90.4.252"]
+
 
 def do_deploy(archive_path):
     """Distributes the archived file to the host servers.
