@@ -2,11 +2,11 @@
 """ A python script that generates a .tgz archive using Fabric. """
 import os
 from datetime import datetime
-from fabric.api import local, runs_once
+from fabric.api import local
 
-@runs_once
+
 def do_pack():
-    """Generates a .tgz archive from the contents of web_static folder."""
+    """ Generates a .tgz archive from the contents of web_static folder. """
     if not os.path.isdir("versions"):
         os.mkdir("versions")
     cur_time = datetime.now()
@@ -24,5 +24,4 @@ def do_pack():
         archize_size = os.stat(output).st_size
         print("web_static packed: {} -> {} Bytes".format(output, archize_size))
     except Exception:
-        output = None
-    return output
+        return None
