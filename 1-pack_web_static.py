@@ -1,13 +1,12 @@
 #!/usr/bin/python3
-"""A module for web application deployment with Fabric."""
+""" A python script that generates a .tgz archive using Fabric. """
 import os
 from datetime import datetime
 from fabric.api import local, runs_once
 
-
 @runs_once
 def do_pack():
-    """Archives the static files."""
+    """Generates a .tgz archive from the contents of web_static folder."""
     if not os.path.isdir("versions"):
         os.mkdir("versions")
     cur_time = datetime.now()
