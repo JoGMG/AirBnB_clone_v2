@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ A python script that generates and distributes a .tgz archive using Fabric. """
 import os
-from fabric.api import env, local, put, run
+from fabric.api import env, put, run
 
 """ Host server IP addresses to execute script """
 env.hosts = ["34.202.159.210", "54.90.4.252"]
@@ -17,7 +17,7 @@ def do_deploy(archive_path):
     folder_name = file_name.replace(".tgz", "")
     folder_path = "/data/web_static/releases/{}/".format(folder_name)
     try:
-        put(archive_path, "/tmp/{}".format(file_name))
+        put(archive_path, "/tmp/")
         run("mkdir -p {}".format(folder_path))
         run("tar -xzf /tmp/{} -C {}".format(file_name, folder_path))
         run("rm /tmp/{}".format(file_name))
