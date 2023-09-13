@@ -5,7 +5,7 @@
 import os
 from fabric.api import env, put, run
 
-""" Host server IP addresses to execute script """
+""" Remote server details to execute script """
 env.hosts = ["34.202.159.210", "54.90.4.252"]
 env.user = "ubuntu"
 env.key_filename = "~/.ssh/alx_sevkey"
@@ -18,10 +18,10 @@ def do_deploy(archive_path):
     """
     if not os.path.exists(archive_path):
         return False
-    file_name = os.path.basename(archive_path)
-    folder_name = file_name.replace(".tgz", "")
-    folder_path = "/data/web_static/releases/{}/".format(folder_name)
     try:
+        file_name = os.path.basename(archive_path)
+        folder_name = file_name.replace(".tgz", "")
+        folder_path = "/data/web_static/releases/{}/".format(folder_name)
         put(archive_path, "/tmp/")
         run("mkdir -p {}".format(folder_path))
         run("tar -xzf /tmp/{} -C {}".format(file_name, folder_path))
