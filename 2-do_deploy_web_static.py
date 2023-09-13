@@ -18,7 +18,7 @@ def do_deploy(archive_path):
         - Argument:
             - archive_path: The path to the archived file.
     """
-    if not os.path.exists(archive_path):
+    if not os.path.isfile(archive_path):
         return False
     try:
         file_name = os.path.basename(archive_path)
