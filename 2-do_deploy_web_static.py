@@ -1,18 +1,22 @@
 #!/usr/bin/python3
-""" A python script that generates and distributes a .tgz
-    archive using Fabric.
+"""
+A python script that generates and distributes a .tgz 
+archive using Fabric.
 """
 import os
 from fabric.api import env, put, run
 
 """ Remote server details to execute script """
 env.hosts = ["34.202.159.210", "54.90.4.252"]
+env.user = "ubuntu"
+env.key_filename = "~/.ssh/alx_sevkey"
 
 
 def do_deploy(archive_path):
-    """Distributes the archived file to the host servers.
-    Argument:
-        archive_path (str): The path to the archived file.
+    """ 
+    Distributes the archived file to the host servers.
+        - Argument:
+            - archive_path: The path to the archived file.
     """
     if not os.path.exists(archive_path):
         return False
@@ -28,7 +32,6 @@ def do_deploy(archive_path):
         run("rm -rf {}/web_static".format(folder_path))
         run("rm -rf /data/web_static/current")
         run("ln -s {} /data/web_static/current".format(folder_path))
-        print('New version deployed!')
         return True
-    except Exception:
+    except:
         return False
