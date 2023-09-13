@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-A python script that generates and distributes a .tgz 
+A python script that generates and distributes a .tgz
 archive using Fabric.
 """
 import os
@@ -13,7 +13,7 @@ env.key_filename = "~/.ssh/alx_sevkey"
 
 
 def do_deploy(archive_path):
-    """ 
+    """
     Distributes the archived file to the host servers.
         - Argument:
             - archive_path: The path to the archived file.
@@ -33,5 +33,5 @@ def do_deploy(archive_path):
         run("rm -rf /data/web_static/current")
         run("ln -s {} /data/web_static/current".format(folder_path))
         return True
-    except:
+    except Exception:
         return False
