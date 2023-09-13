@@ -7,8 +7,6 @@ from fabric.api import env, put, run
 
 """ Remote server details to execute script """
 env.hosts = ["34.202.159.210", "54.90.4.252"]
-env.user = "ubuntu"
-env.key_filename = "~/.ssh/alx_sevkey"
 
 
 def do_deploy(archive_path):
