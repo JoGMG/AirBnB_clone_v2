@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-A python script that generates and distributes a .tgz
+A python script that distributes a .tgz
 archive using Fabric.
 """
 import os
