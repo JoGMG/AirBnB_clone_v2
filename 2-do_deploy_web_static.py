@@ -48,16 +48,6 @@ def do_deploy(archive_path):
         file_name = os.path.basename(archive_path)
         folder_name = file_name.replace(".tgz", "")
         folder_path = "/data/web_static/releases/{}/".format(folder_name)
-
-        run_locally = os.getenv("run_locally", None)
-        if run_locally is None:
-            local("mkdir -p {}".format(folder_path))
-            local("tar -xzf {} -C {}".format(archive_path, folder_path))
-            local("mv {}/web_static/* {}".format(folder_path, folder_path))
-            local("rm -rf {}/web_static".format(folder_path))
-            local("ln -s {} /data/web_static/current".format(folder_path))
-            os.environ["run_locally"] = "True"
-
         put(archive_path, "/tmp/")
         run("mkdir -p {}".format(folder_path))
         run("tar -xzf /tmp/{} -C {}".format(file_name, folder_path))
