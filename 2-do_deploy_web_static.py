@@ -4,7 +4,7 @@ A python script that generates and distributes a .tgz
 archive using Fabric.
 """
 import os
-from fabric.api import env, put, run
+from fabric.api import local, env, put, run
 
 """ Remote webservers detail to execute script """
 env.hosts = ["34.202.159.210", "54.90.4.252"]
@@ -24,6 +24,16 @@ def do_deploy(archive_path):
         file_name = os.path.basename(archive_path)
         folder_name = file_name.replace(".tgz", "")
         folder_path = "/data/web_static/releases/{}/".format(folder_name)
+
+        run_locally = os.getenv("run_locally", None)
+        if run_locally is None:
+            local("mkdir -p {}".format(folder_path))
+            local("tar -xzf {} -C {}".format(archive_path, folder_path))
+            local("mv {}/web_static/* {}".format(folder_path, folder_path))
+            local("rm -rf {}/web_static".format(folder_path))
+            local("ln -s {} /data/web_static/current".format(folder_path))
+            os.environ["run_locally"] = "True"
+
         put(archive_path, "/tmp/")
         run("mkdir -p {}".format(folder_path))
         run("tar -xzf /tmp/{} -C {}".format(file_name, folder_path))
