@@ -85,7 +85,14 @@ def do_clean(number=0):
         archives = archives[start:]
     else:
         archives = []
+
+    # Delete out-dated archives
     for archive in archives:
         os.unlink('versions/{}'.format(archive))
-    run("find {} -maxdepth 1 -name 'web_static*' -type d | sort -r" +
-        "| tr '\n' ' ' | cut -d ' ' -f {}- | xargs rm -rf".format(path, start + 1))
+
+    # Delete all out-dated archives remotely
+    run("find {} -maxdepth 1 -name 'web_static*' -type d | sort -r \
+        | tr '\n' ' ' | cut -d ' ' -f {}- | xargs rm -rf"
+        .format(path, start + 1))
+
+    print('Cleaning finished successfully')
