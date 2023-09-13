@@ -1,123 +1,107 @@
-#!/usr/bin/puppet apply
 # AirBnB clone web server setup and configuration
-exec { 'apt-get-update':
-  command => '/usr/bin/apt-get update',
-  path    => '/usr/bin:/usr/sbin:/bin',
+
+exec { 'update':
+  provider => shell,
+  command  => 'sudo apt-get -y update',
+  before   => Exec['install Nginx'],
 }
 
-exec { 'remove-current':
-  command => 'rm -rf /data/web_static/current',
-  path    => '/usr/bin:/usr/sbin:/bin',
+exec { 'install Nginx':
+  provider => shell,
+  command  => 'sudo apt-get -y install nginx',
+  before   => Exec['create directories'],
 }
 
-package { 'nginx':
-  ensure  => installed,
-  require => Exec['apt-get-update'],
+exec { 'create directories':
+  provider => shell,
+  command  => 'mkdir -p /data/web_static/releases/test /data/web_static/shared',
+  before   => Exec['create test html file'],
 }
 
-file { '/var/www':
-  ensure  => directory,
-  mode    => '0755',
-  recurse => true,
-  require => Package['nginx'],
-}
-
-file { '/var/www/html/index.html':
-  content => 'Hello, World!',
-  require => File['/var/www'],
-}
-
-file { '/var/www/error/404.html':
-  content => "Ceci n'est pas une page",
-  require => File['/var/www'],
-}
-
-exec { 'make-static-files-folder':
-  command => 'mkdir -p /data/web_static/releases/test /data/web_static/shared',
-  path    => '/usr/bin:/usr/sbin:/bin',
-  require => Package['nginx'],
-}
-
-file { '/data/web_static/releases/test/index.html':
-  content =>
-"<!DOCTYPE html>
-<html lang='en-US'>
+exec { 'create test html file':
+  provider => shell,
+  command  => 'printf %s "<html>
 	<head>
-		<title>Home - AirBnB Clone</title>
 	</head>
 	<body>
-		<h1>Welcome to AirBnB!</h1>
-	<body>
-</html>
-",
-  replace => true,
-  require => Exec['make-static-files-folder'],
+		Holberton School
+	</body>
+</html>" > /data/web_static/releases/test/index.html',
+  before   => Exec['remove current directory, if exists'],
 }
 
-exec { 'link-static-files':
-  command => 'ln -sf /data/web_static/releases/test/ /data/web_static/current',
-  path    => '/usr/bin:/usr/sbin:/bin',
-  require => [
-    Exec['remove-current'],
-    File['/data/web_static/releases/test/index.html'],
-  ],
+exec { 'remove current directory, if exists':
+  provider => shell,
+  command  => '[ -d /data/web_static/current ] && rm -rf /data/web_static/current',
+  before   => Exec['link test directory to current directory'],
 }
 
-exec { 'change-data-owner':
-  command => 'chown -hR ubuntu:ubuntu /data',
-  path    => '/usr/bin:/usr/sbin:/bin',
-  require => Exec['link-static-files'],
+exec { 'link test directory to current directory':
+  provider => shell,
+  command  => 'ln -sf /data/web_static/releases/test/ /data/web_static/current',
+  before   => file['give user and group ownership'],
 }
 
-file { '/etc/nginx/sites-available/default':
+file { 'give user and group ownership':
+  ensure  => directory,
+  path    => '/data',
+  recurse => true,
+  user    => 'ubuntu',
+  group   => 'ubuntu',
+  before  => Exec['write into nginx config file'],
+}
+
+file { 'create index.html':
   ensure  => present,
-  mode    => '0644',
-  content =>
-"server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
-	server_name _;
-	index index.html index.htm;
-	error_page 404 /404.html;
-	add_header X-Served-By \$hostname;
-	location / {
-		root /var/www/html/;
-		try_files \$uri \$uri/ =404;
-	}
+  path    => '/var/www/html/index.html',
+  content => 'Hello, World!',
+  before  => Exec['write into nginx config file'],
+}
+
+exec { 'create error directory':
+  provider => shell,
+  command  => 'mkdir -p /var/www/error/',
+  before   => file['create 404.html'],
+}
+
+file { 'create 404.html':
+  ensure  => present,
+  path    => '/var/www/error/404.html',
+  content => "Ceci n'est pas une page",
+  before  => Exec['write into nginx config file'],
+}
+
+exec { 'write into nginx config file':
+  provider => shell,
+  command  => 'printf %s "server {
+  listen 80;
+  listen [::]:80 default_server;
+
+  add_header X-Served-By \$hostname;
+
+	root /var/www/html/;
+  index index.html index.htm index.nginx-debian.html;
+
+  server_name _;
+
+  location / {
+    try_files \$uri \$uri/ =404;
+  }
+
 	location /hbnb_static/ {
-		alias /data/web_static/current/;
-		try_files \$uri \$uri/ =404;
+    alias /data/web_static/current/;
 	}
-	if (\$request_filename ~ redirect_me){
-		rewrite ^ https://sketchfab.com/bluepeno/models permanent;
-	}
-	location = /404.html {
-		root /var/www/error/;
-		internal;
-	}
-}",
-  require => [
-    Package['nginx'],
-    File['/var/www/html/index.html'],
-    File['/var/www/error/404.html'],
-    Exec['change-data-owner']
-  ],
+
+  error_page 404 /404.html;
+  location = /404.html {
+    root /var/www/error/;
+    internal;
+  }
+}" > /etc/nginx/sites-available/default',
+  before   => Exec['restart Nginx'],
 }
 
-exec { 'enable-site':
-  command => "ln -sf '/etc/nginx/sites-available/default' '/etc/nginx/sites-enabled/default'",
-  path    => '/usr/bin:/usr/sbin:/bin',
-  require => File['/etc/nginx/sites-available/default'],
+exec { 'restart Nginx':
+  provider => shell,
+  command  => 'sudo service nginx restart',
 }
-
-exec { 'start-nginx':
-  command => 'sudo service nginx restart',
-  path    => '/usr/bin:/usr/sbin:/bin',
-  require => [
-    Exec['enable-site'],
-    Package['nginx'],
-    File['/data/web_static/releases/test/index.html'],
-  ],
-}
-
-Exec['start-nginx']
