@@ -5,14 +5,16 @@ package { 'nginx':
 }
 
 file { 'create ../test':
-  ensure => directory,
-  path   => '/data/web_static/releases/test',
-  before => file['create ../index.html'],
+  ensure  => directory,
+  path    => '/data/web_static/releases/test',
+  recurse => true,
+  before  => file['create ../index.html'],
 }
 
 file { 'create ../shared':
-  ensure => directory,
-  path   => '/data/web_static/shared',
+  ensure  => directory,
+  path    => '/data/web_static/shared',
+  recurse => true,
 }
 
 file { 'create ../index.html':
@@ -60,9 +62,10 @@ file { 'create index.html':
 }
 
 file { 'create ../error':
-  ensure => directory,
-  path   => '/var/www/error/',
-  before => file['create 404.html'],
+  ensure  => directory,
+  path    => '/var/www/error/',
+  recurse => true,
+  before  => file['create 404.html'],
 }
 
 file { 'create 404.html':
