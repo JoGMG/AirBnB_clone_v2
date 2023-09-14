@@ -15,20 +15,14 @@ exec { 'install Nginx':
 exec { 'create directories':
   provider => shell,
   command  => 'sudo mkdir -p /data/web_static/releases/test /data/web_static/shared',
-  before   => Exec['create test html file'],
+  before   => file['create test html file'],
 }
 
 file { 'create test html file':
   ensure  => present,
   path    => '/data/web_static/releases/test/index.html',
-  content => '<html>
-  <head>
-	</head>
-	<body>
-		Holberton School
-	</body>
-</html>',
-  before  => Exec['write into nginx config file'],
+  content => '<html>\n\t<head>\n\t</head>\n\t<body>\n\t\tHolberton School\n\t</body>\n</html>',
+  before  => file['write into nginx config file'],
 }
 
 exec { 'remove current directory, if exists':
@@ -49,19 +43,19 @@ file { 'give user and group ownership':
   recurse => true,
   user    => 'ubuntu',
   group   => 'ubuntu',
-  before  => Exec['write into nginx config file'],
+  before  => file['write into nginx config file'],
 }
 
 file { 'create index.html':
   ensure  => present,
   path    => '/var/www/html/index.html',
   content => 'Hello, World!',
-  before  => Exec['write into nginx config file'],
+  before  => file['write into nginx config file'],
 }
 
 exec { 'create error directory':
   provider => shell,
-  command  => 'mkdir -p /var/www/error/',
+  command  => 'sudo mkdir -p /var/www/error/',
   before   => file['create 404.html'],
 }
 
@@ -69,7 +63,7 @@ file { 'create 404.html':
   ensure  => present,
   path    => '/var/www/error/404.html',
   content => "Ceci n'est pas une page",
-  before  => Exec['write into nginx config file'],
+  before  => file['write into nginx config file'],
 }
 
 file { 'write into nginx config file':
