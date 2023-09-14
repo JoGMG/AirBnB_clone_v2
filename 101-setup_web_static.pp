@@ -36,11 +36,6 @@ file { '/data/web_static/releases/test/index.html':
 }
 
 file { '/data/web_static/current':
-  ensure  => absent,
-  recurse => true,
-}
-
-file { '/data/web_static/current':
   ensure => 'symlink',
   target => '/data/web_static/releases/test/',
   force  => true,
