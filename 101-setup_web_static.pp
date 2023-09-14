@@ -1,19 +1,19 @@
 # AirBnB clone web server setup and configuration
 
 exec { 'update':
-  provider => shell,
+  provider => 'shell',
   command  => 'sudo apt-get -y update',
   before   => Exec['install Nginx'],
 }
 
 exec { 'install Nginx':
-  provider => shell,
+  provider => 'shell',
   command  => 'sudo apt-get -y install nginx',
   before   => Exec['create directories'],
 }
 
 exec { 'create directories':
-  provider => shell,
+  provider => 'shell',
   command  => 'sudo mkdir -p /data/web_static/releases/test /data/web_static/shared',
   before   => file['create test html file'],
 }
@@ -26,13 +26,13 @@ file { 'create test html file':
 }
 
 exec { 'remove current directory, if exists':
-  provider => shell,
+  provider => 'shell',
   command  => '[ -d /data/web_static/current ] && sudo rm -rf /data/web_static/current',
   before   => Exec['link test directory to current directory'],
 }
 
 exec { 'link test directory to current directory':
-  provider => shell,
+  provider => 'shell',
   command  => 'sudo ln -sf /data/web_static/releases/test/ /data/web_static/current',
   before   => file['give user and group ownership'],
 }
@@ -54,7 +54,7 @@ file { 'create index.html':
 }
 
 exec { 'create error directory':
-  provider => shell,
+  provider => 'shell',
   command  => 'sudo mkdir -p /var/www/error/',
   before   => file['create 404.html'],
 }
@@ -98,6 +98,6 @@ file { 'write into nginx config file':
 }
 
 exec { 'restart Nginx':
-  provider => shell,
+  provider => 'shell',
   command  => 'sudo service nginx restart',
 }
