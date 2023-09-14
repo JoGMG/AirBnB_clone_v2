@@ -14,31 +14,32 @@ exec { 'install Nginx':
 
 exec { 'create directories':
   provider => shell,
-  command  => 'mkdir -p /data/web_static/releases/test /data/web_static/shared',
+  command  => 'sudo mkdir -p /data/web_static/releases/test /data/web_static/shared',
   before   => Exec['create test html file'],
 }
 
-exec { 'create test html file':
-  provider => shell,
-  command  => 'printf %s "<html>
-	<head>
+file { 'create test html file':
+  ensure  => present,
+  path    => '/data/web_static/releases/test/index.html',
+  content => '<html>
+  <head>
 	</head>
 	<body>
 		Holberton School
 	</body>
-</html>" > /data/web_static/releases/test/index.html',
-  before   => Exec['remove current directory, if exists'],
+</html>',
+  before  => Exec['write into nginx config file'],
 }
 
 exec { 'remove current directory, if exists':
   provider => shell,
-  command  => '[ -d /data/web_static/current ] && rm -rf /data/web_static/current',
+  command  => '[ -d /data/web_static/current ] && sudo rm -rf /data/web_static/current',
   before   => Exec['link test directory to current directory'],
 }
 
 exec { 'link test directory to current directory':
   provider => shell,
-  command  => 'ln -sf /data/web_static/releases/test/ /data/web_static/current',
+  command  => 'sudo ln -sf /data/web_static/releases/test/ /data/web_static/current',
   before   => file['give user and group ownership'],
 }
 
@@ -71,9 +72,10 @@ file { 'create 404.html':
   before  => Exec['write into nginx config file'],
 }
 
-exec { 'write into nginx config file':
-  provider => shell,
-  command  => 'printf %s "server {
+file { 'write into nginx config file':
+  ensure  => present,
+  path    => '/etc/nginx/sites-available/default',
+  content => "server {
   listen 80;
   listen [::]:80 default_server;
 
@@ -97,8 +99,8 @@ exec { 'write into nginx config file':
     root /var/www/error/;
     internal;
   }
-}" > /etc/nginx/sites-available/default',
-  before   => Exec['restart Nginx'],
+}",
+  before  => Exec['restart Nginx'],
 }
 
 exec { 'restart Nginx':
