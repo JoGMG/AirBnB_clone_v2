@@ -26,7 +26,13 @@ package { 'nginx':
 
 -> file { '/data/web_static/releases/test/index.html':
   ensure  => present,
-  content => "this webpage is found in data/web_static/releases/test/index.htm \n",
+  content => "<html>
+	  <head>
+	  </head>
+	< body>
+		  Holberton School
+	  </body>
+</html>",
 }
 
 -> file { '/data/web_static/current':
@@ -46,14 +52,18 @@ file { '/var/www':
   ensure => directory,
 }
 
--> file { '/var/www/html/index.html':
-  ensure  => present,
-  content => "This is my first upload  in /var/www/index.html***\n",
+-> file { '/var/www/error':
+  ensure => directory,
 }
 
--> file { '/var/www/html/404.html':
+-> file { '/var/www/html/index.html':
   ensure  => present,
-  content => "Ceci n'est pas une page - Error page\n",
+  content => "Hello World!\n",
+}
+
+-> file { '/var/www/error/404.html':
+  ensure  => present,
+  content => "Ceci n'est pas une page",
 }
 
 -> file { '/etc/nginx/sites-available/default':
