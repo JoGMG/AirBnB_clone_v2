@@ -1,97 +1,87 @@
-# AirBnB clone web server setup and configuration
+# Puppet for setup
+
+$nginx_conf = "server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    add_header X-Served-By ${hostname};
+    root   /var/www/html;
+    index  index.html index.htm;
+    location /hbnb_static {
+        alias /data/web_static/current;
+        index index.html index.htm;
+    }
+    location /redirect_me {
+        return 301 http://linktr.ee/firdaus_h_salim/;
+    }
+    error_page 404 /404.html;
+    location /404 {
+      root /var/www/html;
+      internal;
+    }
+}"
 
 package { 'nginx':
-  ensure => 'installed',
+  ensure   => 'present',
+  provider => 'apt',
 }
 
-file { '/data':
-  ensure => directory,
+-> file { '/data':
+  ensure  => 'directory',
 }
 
-file { '/data/web_static':
-  ensure => directory,
+-> file { '/data/web_static':
+  ensure => 'directory',
 }
 
-file { '/data/web_static/releases':
-  ensure => directory,
+-> file { '/data/web_static/releases':
+  ensure => 'directory',
 }
 
-file { '/data/web_static/releases/test':
-  ensure => directory,
+-> file { '/data/web_static/releases/test':
+  ensure => 'directory',
 }
 
-file { '/data/web_static/shared':
-  ensure => directory,
+-> file { '/data/web_static/shared':
+  ensure => 'directory',
 }
 
-file { '/data/web_static/releases/test/index.html':
-  ensure  => present,
-  content => '<html>
-	<head>
-	</head>
-	<body>
-		Holberton School
-	</body>
-</html>',
+-> file { '/data/web_static/releases/test/index.html':
+  ensure  => 'present',
+  content => "this webpage is found in data/web_static/releases/test/index.htm \n",
 }
 
-file { '/data/web_static/current':
-  ensure => 'symlink',
-  target => '/data/web_static/releases/test/',
-  force  => true,
+-> file { '/data/web_static/current':
+  ensure => 'link',
+  target => '/data/web_static/releases/test',
 }
 
-file { '/data/':
-  ensure  => directory,
-  user    => 'ubuntu',
-  group   => 'ubuntu',
-  recurse => true,
+-> exec { 'chown -R ubuntu:ubuntu /data/':
+  path => '/usr/bin/:/usr/local/bin/:/bin/',
 }
 
-file { '/var/www/html/index.html':
-  ensure  => present,
-  content => 'Hello, World!',
+file { '/var/www':
+  ensure => 'directory',
 }
 
-file { '/var/www/error/':
-  ensure  => directory,
-  recurse => true,
+-> file { '/var/www/html':
+  ensure => 'directory',
 }
 
-file { '/var/www/error/404.html':
-  ensure  => present,
-  content => "Ceci n'est pas une page",
+-> file { '/var/www/html/index.html':
+  ensure  => 'present',
+  content => "This is my first upload  in /var/www/index.html***\n",
 }
 
-file { '/etc/nginx/sites-available/default':
-  ensure  => present,
-  content => "server {
-  listen 80;
-  listen [::]:80 default_server;
-
-  add_header X-Served-By \$hostname;
-
-	root /var/www/html/;
-  index index.html index.htm index.nginx-debian.html;
-
-  server_name _;
-
-  location / {
-    try_files \$uri \$uri/ =404;
-  }
-
-	location /hbnb_static/ {
-    alias /data/web_static/current/;
-	}
-
-  error_page 404 /404.html;
-  location = /404.html {
-    root /var/www/error/;
-    internal;
-  }
-}",
+-> file { '/var/www/html/404.html':
+  ensure  => 'present',
+  content => "Ceci n'est pas une page - Error page\n",
 }
 
-exec { 'nginx restart':
+-> file { '/etc/nginx/sites-available/default':
+  ensure  => 'present',
+  content => $nginx_conf,
+}
+
+-> exec { 'nginx restart':
   path => '/etc/init.d/',
 }
