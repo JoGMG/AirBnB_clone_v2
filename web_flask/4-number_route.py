@@ -13,7 +13,7 @@ def hello():
 
 @app.route('/hbnb')
 def hbnb():
-    return 'HBNB!'
+    return 'HBNB'
 
 
 @app.route('/c/<text>')
@@ -27,10 +27,9 @@ def python_index(text):
     return 'Python {}'.format(text.replace('_', ' '))
 
 
-@app.route('/number/<n>')
+@app.route('/number/<int:n>')
 def num_index(n):
-    if type(n) == int or float:
-        return '{} is a number'.format(n)
+    return '{} is a number'.format(n)
 
 
 if __name__ == '__main__':
