@@ -3,19 +3,20 @@
 from flask import Flask
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 
 
-@app.route('/', strict_slashes=False)
+@app.route('/')
 def hello():
     return 'Hello HBNB!'
 
 
-@app.route('/hbnb', strict_slashes=False)
+@app.route('/hbnb')
 def hbnb():
     return 'HBNB!'
 
 
-@app.route('/c/<text>', strict_slashes=False)
+@app.route('/c/<text>')
 def c_index(text):
     return 'C {}'.format(text.replace('_', ' '))
 
