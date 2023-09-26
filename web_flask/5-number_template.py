@@ -27,19 +27,15 @@ def python_index(text):
     return 'Python {}'.format(text.replace('_', ' '))
 
 
-@app.route('/number/<n>')
+@app.route('/number/<int:n>')
 def num_index(n):
-    if type(n) == int or float:
-        return '{} is a number'.format(n)
+    return '{} is a number'.format(n)
 
 
-@app.route('/number_template/<n>')
+@app.route('/number_template/<int:n>')
 def num_template(n):
-    if type(n) == int or float:
-        num = {
-            'n': n
-        }
-        return render_template('5-number.html', **num)
+    num = {'n': n}
+    return render_template('5-number.html', **num)
 
 
 if __name__ == '__main__':
