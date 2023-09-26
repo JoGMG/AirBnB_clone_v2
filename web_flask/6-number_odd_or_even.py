@@ -13,7 +13,7 @@ def hello():
 
 @app.route('/hbnb')
 def hbnb():
-    return 'HBNB!'
+    return 'HBNB'
 
 
 @app.route('/c/<text>')
