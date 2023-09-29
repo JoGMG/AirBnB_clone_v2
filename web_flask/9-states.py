@@ -5,14 +5,25 @@ from models import storage
 from models.state import State
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 
 
-@app.route('/cities_by_states', strict_slashes=False)
-def states_cities():
+@app.route('/states')
+def states():
     all_states = list(storage.all(State).values())
     all_states.sort(key=lambda x: x.name)
     states_list = {'states': all_states}
-    return render_template('8-cities_by_states.html', **states_list)
+    return render_template('9-states.html', **states_list)
+
+
+@app.route('/states/<id>')
+def states_id(id):
+    all_states = list(storage.all(State).values())
+    all_states.sort(key=lambda x: x.name)
+    states_list = {'states': all_states}
+    if all_states.id == id
+        return render_template('9-states.html', **states_list)
+    return render_template('9-states.html', **states_list)
 
 
 @app.teardown_appcontext
