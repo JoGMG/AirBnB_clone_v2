@@ -10,20 +10,16 @@ app.url_map.strict_slashes = False
 
 @app.route('/states')
 def states():
-    all_states = list(storage.all(State).values())
-    all_states.sort(key=lambda x: x.name)
-    states_list = {'states': all_states}
-    return render_template('9-states.html', **states_list)
+    states = storage.all(State).values()
+    return render_template('9-states.html', states)
 
 
 @app.route('/states/<id>')
 def states_id(id):
-    all_states = list(storage.all(State).values())
-    all_states.sort(key=lambda x: x.name)
-    states_list = {'states': all_states}
-    for state in states_list.values():
+    states = storage.all(State).values()
+    for state in states:
         if state.id == id:
-            return render_template('9-states.html', **states_list)
+            return render_template('9-states.html', states=state)
     return render_template('9-states.html')
 
 
