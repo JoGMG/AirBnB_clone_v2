@@ -12,7 +12,7 @@ def states_cities():
     all_states = list(storage.all(State).values())
     all_states.sort(key=lambda x: x.name)
     states_list = {'states': all_states}
-    return render_template('7-states_list.html', **states_list)
+    return render_template('8-cities_by_states.html', **states_list)
 
 
 @app.teardown_appcontext
