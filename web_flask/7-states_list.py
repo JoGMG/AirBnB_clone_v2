@@ -12,9 +12,7 @@ app.url_map.strict_slashes = False
 def states():
     all_states = list(storage.all(State).values())
     all_states.sort(key=lambda x: x.name)
-    states_list = {
-        'states': all_states
-    }
+    states_list = {'states': all_states}
     return render_template('7-states_list.html', **states_list)
 
 
