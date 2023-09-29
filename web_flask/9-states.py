@@ -21,9 +21,10 @@ def states_id(id):
     all_states = list(storage.all(State).values())
     all_states.sort(key=lambda x: x.name)
     states_list = {'states': all_states}
-    if all_states.id == id
-        return render_template('9-states.html', **states_list)
-    return render_template('9-states.html', **states_list)
+    for state in states_list.values():
+        if state.id == id:
+            return render_template('9-states.html', **states_list)
+    return render_template('9-states.html')
 
 
 @app.teardown_appcontext
