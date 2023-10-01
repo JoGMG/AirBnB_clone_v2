@@ -91,7 +91,7 @@ def do_clean(number=0):
         os.unlink('versions/{}'.format(archive))
 
     # Delete all out-dated archives remotely
-    run("find {} -maxdepth 1 -name 'web_static*' -type d | sort -r \
+    run("find {} -maxdepth 1 -name 'web_static*' -type d | sort \
         | tr '\n' ' ' | cut -d ' ' -f {}- | xargs rm -rf"
         .format(path, start + 1))
 
