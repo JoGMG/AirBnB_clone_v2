@@ -8,9 +8,6 @@
         <link rel="stylesheet" type="text/css" href="../static/styles/6-filters.css">
         <link rel="stylesheet" type="text/css" href="../static/styles/8-places.css">
         <link rel="icon" type="image/png" href="../static/images/icon.png">
-        <link rel="icon" type="image/png" href="../static/images/icon_group.png">
-        <link rel="icon" type="image/png" href="../static/images/icon_bed.png">
-        <link rel="icon" type="image/png" href="../static/images/icon_bath.png">
         <title>Airbnb</title>
     </head>
     <body>
@@ -46,19 +43,23 @@
             </section>
             <section class="places">
                 <h1>Places</h1>
-                <article>
+                <div class="boxes">
                 {% for place in places.values()|sort(attribute='name') %}
-                    <h2>{{ place.name }}</h2>
-                    <div class="price_by_night">{{ place.price_by_night }}</div>
-                    <div class="information">
-                        <div class="max_guest">{{ place.max_guest }}</div>
-                        <div class="number_rooms">{{ place.number_rooms }}</div>
-                        <div class="number_bathrooms">{{ place.number_bathrooms }}</div>
-                    </div>
-                    <div class="user"><strong>Owner: </strong>{{ place.user.first_name }}</div>
-                    <div class="description">{{ place.description }}</div>
+                    <article>
+                        <div class="place_header">
+                            <h2>{{ place.name }}</h2>
+                            <div class="price_by_night">${{ place.price_by_night }}</div>
+                        </div>
+                        <div class="information">
+                            <div class="max_guest">{{ place.max_guest }} Guests</div>
+                            <div class="number_rooms">{{ place.number_rooms }} Bedrooms</div>
+                            <div class="number_bathrooms">{{ place.number_bathrooms }} Bathrooms</div>
+                        </div>
+                        <div class="user"><strong>Owner: </strong>{{ place.user.first_name }} {{ place.user.last_name }}</div>
+                        <div class="description">{{ place.description|safe }}</div>
+                    </article>
                 {% endfor %}
-                </article>
+                </div>
             </section>
         </div>
         <footer>
