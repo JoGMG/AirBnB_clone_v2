@@ -8,12 +8,6 @@
 }
 
 /* Used flexbox to improve the places section */
-div.container_1 {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: start;
-}
-
 article {
     width: 390px;
     padding: 20px;
@@ -24,23 +18,36 @@ article {
     min-height: 250px;
 }
 
-article h2 {
+article div.place_header h2 {
     font-size: 30px;
-    margin-top: 15px;
+    text-align: left;
+    margin-top: 0px;
+    /* margin-right: 15px; */
+    margin-left: 20px;
+}
+
+.boxes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }
 
 div.price_by_night {
     color: #FF5A5F;
     border: 4px solid #FF5A5F;
     border-radius: 100%;
-    min-width: 60px;
-    height: 60px;
-    line-height: 60px;
+    min-width: 70px;
+    height: 70px;
+    line-height: 70px;
     font-size: 30px;
-    position: relative;
     float: right;
-    top: -80px;
+    margin-bottom: 15px;
+}
 
+.place_header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 div.information {
@@ -59,7 +66,7 @@ div.number_bathrooms {
     background-position: 50% 5px;
     display: inline-block;
     position: relative;
-    left: 30px;
+    align-items: center;
 }
 
 div.max_guest {
@@ -85,7 +92,7 @@ div.description {
 .places div.reviews {
     margin-top: 40px;
     width: 100%;
-    display: inline-block;
+    display: contents;
 }
 
 .places div.amenities h2,
@@ -94,6 +101,7 @@ div.description {
     border-bottom: 2px solid #DDDDDD;
     text-align: left;
     line-height: 30px;
+    min-width: 100px;
 }
 
 .places div.amenities ul,
@@ -103,12 +111,11 @@ div.description {
 }
 
 .places div.amenities li {
-    height: 100%;
-    line-height: 40px;
-    width: 100px;
-    padding-left: 50px;
+    width: 100%;
     background-repeat: no-repeat;
     background-size: 35px;
+    line-height: 40px;
+    padding-left: 50px;
 }
 
 .places div.amenities li.one {
@@ -123,7 +130,6 @@ div.description {
     background-image: url("../images/icon_pets.png");
 }
 
-.places div.amenities h3,
 .places div.reviews h3 {
     font-size: 14px;
     margin-bottom: 5px;
@@ -131,19 +137,4 @@ div.description {
 
 .places div.reviews p {
     font-size: 12px;
-}
-
-/* Responsive design elements for smaller screens */
-@media (max-width: 768px) {
-    div.container_1 {
-      flex-direction: column;
-      align-items: center;
-    }
-}
-
-@media (min-width: 769px) and (max-width: 1016px) {
-    div.container_1 {
-        flex-direction: column;
-        align-items: center;
-    }
 }

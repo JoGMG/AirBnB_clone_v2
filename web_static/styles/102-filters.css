@@ -27,7 +27,7 @@ button:hover {
 }
 
 .locations,
-.amenities {
+section.filters .amenities {
     height: 100%;
     width: 25%;
     float: left;

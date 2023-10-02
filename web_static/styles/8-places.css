@@ -2,10 +2,12 @@
 .places {
   text-align: center;
 }
+
 .places h1 {
   font-size: 30px;
   text-align: left;
 }
+
 article {
   width: 390px;
   border: 1px solid #FF5A5F;
@@ -16,10 +18,12 @@ article {
   min-height: 250px;
   vertical-align: top;
 }
+
 article h2 {
   font-size: 30px;
   margin-top: 5px;
 }
+
 /* structure within boxed lists of places */
 div.price_by_night {
 color: #FF5A5F;
@@ -33,11 +37,13 @@ color: #FF5A5F;
   float: right;
   top: -80px; 
 }
+
 div.information {
   height: 80px;
   border-top: 1px solid #DDDDDD;
   border-bottom: 1px solid #DDDDDD;
 }
+
 div.max_guest,
 div.number_rooms,
 div.number_bathrooms {
@@ -48,15 +54,19 @@ div.number_bathrooms {
   background-position: 50% 5px;
   background-repeat: no-repeat;
 }
+
 .max_guest {
   background-image: url("../images/icon_group.png");
 }
+
 .number_rooms {
   background-image: url("../images/icon_bed.png");
 }
+
 .number_bathrooms {
   background-image: url("../images/icon_bath.png");
 }
+
 div.user,
 div.description {
   text-align: left;
