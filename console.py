@@ -135,7 +135,7 @@ class HBNBCommand(cmd.Cmd):
             class_name = class_match.group('name')
             params_str = args[len(class_name):].strip()
             params = params_str.split(' ')
-            str_pattern = r'(?P<t_str>"([^"]|\")*"|\'([^\']|\')*\')'
+            str_pattern = r'(?P<t_str>("([^"]|\")*")|(\'([^\']|\\\')*\'))'
             float_pattern = r'(?P<t_float>[-+]?\d+\.\d+)'
             int_pattern = r'(?P<t_int>[-+]?\d+)'
             param_pattern = '{}=({}|{}|{})'.format(
@@ -156,7 +156,12 @@ class HBNBCommand(cmd.Cmd):
                     if int_v is not None:
                         obj_kwargs[key_name] = int(int_v)
                     if str_v is not None:
-                        obj_kwargs[key_name] = str_v[1:-1].replace('_', ' ')
+                        if '_' in str_v:
+                            obj_kwargs[key_name] = str_v[1:-1].replace('_', ' ')
+                        elif '\\"' or "\\'" in str_v:
+                            obj_kwargs[key_name] = str_v[1:-1].replace('\\', '')
+                        else:
+                            obj_kwargs[key_name] = str_v[1:-1]
         else:
             class_name = args
         if not class_name:
@@ -272,7 +277,12 @@ class HBNBCommand(cmd.Cmd):
             for k, v in storage.all().items():
                 class_objects.append(str(v))
 
-        print(class_objects)
+        if class_objects == []:
+            print("** no instance found **")
+        else:
+            print(class_objects)
+
+        
 
     def help_all(self):
         """ Help information for the all command """
@@ -345,7 +355,7 @@ class HBNBCommand(cmd.Cmd):
             args = args[2].partition(" ")
             # check for any relevant arg
             if args[0]:
-                # check for irrelevant args in arg_checks
+                # check for arg_checks in args
                 arg_checks = ["''", '""', "'", '"', "' ' '", '" " "']
                 if args[0] not in arg_checks:
                     # check for double quoted param_name arg
@@ -363,7 +373,7 @@ class HBNBCommand(cmd.Cmd):
                     print("** parameter name missing **")
                     return
 
-                # check for irrelevant args in arg_checks
+                # check for arg_checks in args
                 if args[2] and args[2] not in arg_checks:
                     # check for double quoted param_val arg
                     if args and args[2][0] == '"':
@@ -406,7 +416,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates a parameter of an instance with new information")
         print("(*) means required")
-        print("Usage: update <class_name>* <instance_id>* <param_name>* <param_value>*\n")
+        print("Usage: update <class_name>* <instance_id>* (<param_name>* <param_value> or <dict_param>)*\n")
 
 
 if __name__ == "__main__":
