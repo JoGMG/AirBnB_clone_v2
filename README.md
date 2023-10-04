@@ -144,7 +144,7 @@ Usage: all<br>OR<br>all `<class_name>`
 (hbnb)
 ```
 
-<h3>Alternative Syntax</h3>
+#### Alternative Syntax
 
 ##### Example 0: Show an instance
 Usage: `<class_name>`.show(`<id>`)
