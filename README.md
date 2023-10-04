@@ -74,7 +74,7 @@ These are the models that are currently available.
 
 <h3>Primary Command Syntax</h3>
 
-###### Example 0: Create an instance (with or without parameters)
+#### **Example 0: Create an instance (with or without parameters)**
 Usage: create `<class_name>`<br>OR<br>create `<class_name> <param_name>="<param_value>"`
 ```
 (hbnb) create BaseModel
