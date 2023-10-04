@@ -75,7 +75,7 @@ These are the models that are currently available.
 <h3>Primary Command Syntax</h3>
 
 ###### Example 0: Create an instance (with or without parameters)
-Usage: create <class_name><br>OR<br>create <class_name> <param_name>="<param_value>"
+Usage: create `<class_name>`<br>OR<br>create `<class_name> <param_name>="<param_value>"`
 ```
 (hbnb) create BaseModel
 2f135e8c-a773-4b36-9c5f-708e125b3e71
@@ -178,7 +178,7 @@ Usage: <class_name>.count(<\id>)
 ```
 
 ###### Example 3: Destroy an instance
-Usage: <class_name>.destroy(<\id>)
+Usage: <class_name>.destroy(<id>)
 ```
 (hbnb) BaseModel.destroy(2f135e8c-a773-4b36-9c5f-708e125b3e71)
 (hbnb) BaseModel.show(2f135e8c-a773-4b36-9c5f-708e125b3e71)
