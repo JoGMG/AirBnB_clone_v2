@@ -72,7 +72,7 @@ These are the models that are currently available.
 
 ### Examples
 
-#### Primary Command Syntax
+<h3>Primary Command Syntax</h3>
 
 ##### Example 0: Create an instance (with or without parameters)
 Usage: create `<class_name>`<br>OR<br>create `<class_name> <param_name>="<param_value>"`
@@ -144,7 +144,7 @@ Usage: all<br>OR<br>all `<class_name>`
 (hbnb)
 ```
 
-#### Alternative Syntax
+<h3>Alternative Syntax</h3>
 
 ##### Example 0: Show an instance
 Usage: `<class_name>`.show(`<id>`)
