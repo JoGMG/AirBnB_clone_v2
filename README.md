@@ -1,21 +1,20 @@
-# HBNB - The Console
+# Hbnb - The Console
 
-This repository contains the initial stage of a student project to build a clone of the AirBnB website. This stage implements a backend interface, or console, to manage program data. Console commands allow the user to create, update, and destroy objects, as well as manage file storage. Using a system of JSON serialization/deserialization, storage is persistent between sessions.
+This repository contains the initial segment of a project to build a clone of the AirBnB website. This stage implements a back-end interface to manage program data. The goal is to eventually deploy our server containing a simple copy of the AirBnB website (Hbnb). A console (command interpreter) is created to manage data objects for Hbnb.
 
 ---
 
-
 ## The Command Interpreter
 
-The command interpreter provides a simple REPL (Read-Evaluate-Print-Loop) for interacting with the models in this project only. It can be used to test the functionality of the supported storage engines as well. You can find some examples of its usage [here](#examples).
+The command interpreter (console) provides simple commands to manage data. You can find some examples of its usage [here](#examples).
 
 ### How To Use
 
 1. First clone this repository.
 
 2. Once the repository is cloned locate the "[console.py](console.py)" file and run it as follows:
-   ```powershell
-   ➜  AirBnB_clone_v2 git:(master) ✗ ./console.py
+   ```
+   ➜ ./console.py or python console.py
    ```
 
 4. When this command is run the following prompt should appear:
@@ -23,24 +22,29 @@ The command interpreter provides a simple REPL (Read-Evaluate-Print-Loop) for in
    (hbnb)
    ```
 
-5. This prompt designates that you are in the "HBnB" console. There are a variety of commands available within the console program.
+5. This prompt designates that you are in the "Hbnb" console. There are a variety of commands available within the console program.
 
 ### Supported Commands
 
-These are commands that can be executed by the command interpreter. They have the format `command [argument]...` but you could also use the format `Model.command([argument]...)`, with the exception of the first 3 commands below.
+The command interpreter (console) supports two basic command syntaxes:<br>
+- Primary/Main Command Syntax
+   - `command [argument]...`
+- Alternative Command Syntax
+   - `Model.command([argument]...)`
+   - With the exception of the commands (`help`, `quit`, `EOF` and `create`)
 
-| Format | Description |
+| Syntax | Description |
 |:-|:-|
-| `help [command]` | Prints helpful information about a command (`command`). If `command` is not provided, it prints the help menu. |
+| `help [command]` | Prints helpful information about a command. If `command` is not provided, it prints the help menu. |
 | `quit` | Closes the command interpreter. |
 | `EOF` | Closes the command interpreter. |
-| `create Model [prop_key=prop_value]...` | Creates a new instance of the `Model` class with the given properties. `prop_value` can be a double-quoted string with double-quotes escaped and spaces replaced with underscores. `prop_value` can also be a float or integer. |
+| `create Model [param_name="param_value"]...` | Creates a new instance of the `Model` class with the given parameters. `param_value` can be a double or single quoted string with escaped double or single quotes and underscores replaced with spaces. It can also be a float or integer without quotes. |
 | `count Model` | Prints the number of instances of the `Model` class. |
 | `show Model id` | Prints the string representation of an instance of the `Model` class with the given `id`. |
 | `destroy Model id` | Deletes an instance of the `Model` class with the given `id`. |
 | `all [Model]` | Prints a list containing the string representation of all instances of the `Model` class. `Model` is optional and if it isn't provided, all the availble objects are printed. |
-| `update Model id attr_name attr_value` | Updates an instance of the `Model` class with the given `id` by assigning the attribute value `attr_value` to its attribute named `attr_name`. Attributes having the names `__class__`, `id`, `created_at`, and `updated_at` are silently ignored. |
-| `update Model id dict_repr` | Updates an instance of `Model` having the given `id` by storing the key, value pairs in the given `dict_repr` dictionary as its attributes. The keys `__class__`, `id`, `created_at`, and `updated_at` are silently ignored. |
+| `update Model id param_name param_value` | Updates an instance of the `Model` class with the given `id` by assigning the `param_value` to its `param_name`. Parameters such as `__class__`, `id`, `created_at`, and `updated_at` are silently ignored. |
+| `update Model id dict_param` | Updates an instance of `Model` having the given `id` by storing the key, value pairs in the given `dict_param` dictionary as its parameters. The parameters `__class__`, `id`, `created_at`, and `updated_at` are silently ignored. |
 <br>
 
 ### Supported Models
@@ -49,12 +53,12 @@ These are the models that are currently available.
 
 | Class | Description |
 |:-|:-|
-| BaseModel | A(n abstract) class that represents the base class for all models (all models are instances of this class). |
-| User | Represents a user account. |
-| State | Represents the geographical state in which a _User_ lives or a _City_ belongs to. |
+| BaseModel | An (abstract) class that represents the base class for all models (all models below inherit the properties of this class). |
+| User | Represents a user account. |<br>
+| State | Represents the state in which a _User_ lives or a _City_ belongs to. |
 | City | Represents an urban area in a _State_. |
-| Amenity | Represents a useful feature of a _Place_. |
-| Place | Represents a building containing rooms that can be rented by a _User_. |
+| Place | Represents a place of accomodation in a _City_ that can be rented by a _User_. |
+| Amenity | Represents a feature of a _Place_. |
 | Review | Represents a review of a _Place_. |
 
 ### Environment Variables
@@ -64,86 +68,138 @@ These are the models that are currently available.
 + `HBNB_MYSQL_PWD`: The MySQL server password.
 + `HBNB_MYSQL_HOST`: The MySQL server hostname.
 + `HBNB_MYSQL_DB`: The MySQL server database name.
-+ `HBNB_TYPE_STORAGE`: The type of storage used. It can be `file` (using `FileStorage`) or `db` (using `DBStorage`).
++ `HBNB_TYPE_STORAGE`: The type of storage used. It can be `fs` (using `FileStorage`) or `db` (using `DBStorage`).
 
 ### Examples
 
 <h3>Primary Command Syntax</h3>
 
-###### Example 0: Create an object
-Usage: create <class_name>
+###### Example 0: Create an instance (with or without parameters)
+Usage: create <class_name><br>OR<br>create <class_name> <param_name>="<param_value>"
 ```
 (hbnb) create BaseModel
+2f135e8c-a773-4b36-9c5f-708e125b3e71
+(hbnb)
 ```
 ```
-(hbnb) create BaseModel
-3aa5babc-efb6-4041-bfe9-3cc9727588f8
+(hbnb) create BaseModel name="John"
+8b34cf2a-ab26-4a1f-a319-e28c9355220d
 (hbnb)
 ```
 
-###### Example 1: Show an object
-Usage: show <class_name> <_id>
-
+###### Example 1: Show an instance
+Usage: show <class_name> <id>
 ```
-(hbnb) show BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
-[BaseModel] (3aa5babc-efb6-4041-bfe9-3cc9727588f8) {'id': '3aa5babc-efb6-4041-bfe9-3cc9727588f8', 'created_at': datetime.datetime(2020, 2, 18, 14, 21, 12, 96959),
-'updated_at': datetime.datetime(2020, 2, 18, 14, 21, 12, 96971)}
+(hbnb) show BaseModel 2f135e8c-a773-4b36-9c5f-708e125b3e71
+[BaseModel] (2f135e8c-a773-4b36-9c5f-708e125b3e71) {'id': '2f135e8c-a773-4b36-9c5f-708e125b3e71', 'created_at': datetime.datetime(2023, 10, 4, 2, 15, 43, 966289), 'updated_at': datetime.datetime(2023, 10, 4, 2, 15, 43, 966307)}
+(hbnb)
+```
+```
+(hbnb) show BaseModel 8b34cf2a-ab26-4a1f-a319-e28c9355220d
+[BaseModel] (8b34cf2a-ab26-4a1f-a319-e28c9355220d) {'id': '8b34cf2a-ab26-4a1f-a319-e28c9355220d', 'created_at': datetime.datetime(2023, 10, 4, 2, 16, 44, 7206), 'updated_at': datetime.datetime(2023, 10, 4, 2, 16, 44, 7229), 'name': 'John'}
+```
+
+###### Example 2: Update an instance
+Usage: update <class_name> <id> <param_name> <param_value><br>OR<br>update <class_name> <id> <dict_param>
+```
+(hbnb) update BaseModel 8b34cf2a-ab26-4a1f-a319-e28c9355220d name santa
+(hbnb) show BaseModel 8b34cf2a-ab26-4a1f-a319-e28c9355220d
+[BaseModel] (8b34cf2a-ab26-4a1f-a319-e28c9355220d) {'id': '8b34cf2a-ab26-4a1f-a319-e28c9355220d', 'created_at': datetime.datetime(2023, 10, 4, 2, 16, 44, 7206), 'updated_at': datetime.datetime(2023, 10, 4, 2, 20, 19, 775), 'name': 'santa'}
+(hbnb)
+```
+```
+(hbnb) update BaseModel 8b34cf2a-ab26-4a1f-a319-e28c9355220d {'name': 'buddy'}
+(hbnb) show BaseModel 8b34cf2a-ab26-4a1f-a319-e28c9355220d
+[BaseModel] (8b34cf2a-ab26-4a1f-a319-e28c9355220d) {'id': '8b34cf2a-ab26-4a1f-a319-e28c9355220d', 'created_at': datetime.datetime(2023, 10, 4, 2, 16, 44, 7206), 'updated_at': datetime.datetime(2023, 10, 4, 2, 20, 19, 775), 'name': 'buddy'}
 (hbnb)
 ```
 
-###### Example 2: Destroy an object
-
-Usage: destroy <class_name> <_id>
+###### Example 3: Destroy an instance
+Usage: destroy <class_name> <id>
 ```
-(hbnb) destroy BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
-(hbnb) show BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
+(hbnb) destroy BaseModel 8b34cf2a-ab26-4a1f-a319-e28c9355220d
+(hbnb) show BaseModel 8b34cf2a-ab26-4a1f-a319-e28c9355220d
 ** no instance found **
 (hbnb)
 ```
-###### Example 3: Update an object
-Usage: update <class_name> <_id>
+
+###### Example 3: Count an instance
+Usage: count <class_name>
 ```
-(hbnb) update BaseModel b405fc64-9724-498f-b405-e4071c3d857f first_name "person"
-(hbnb) show BaseModel b405fc64-9724-498f-b405-e4071c3d857f
-[BaseModel] (b405fc64-9724-498f-b405-e4071c3d857f) {'id': 'b405fc64-9724-498f-b405-e4071c3d857f', 'created_at': datetime.datetime(2020, 2, 18, 14, 33, 45, 729889),
-'updated_at': datetime.datetime(2020, 2, 18, 14, 33, 45, 729907), 'first_name': 'person'}
+(hbnb) count BaseModel
+1
 (hbnb)
 ```
+
+###### Example 3: Show all instances or all objects of a particular instance
+Usage: all<br>OR<br>all <class_name>
+```
+(hbnb) all
+["[BaseModel] (2f135e8c-a773-4b36-9c5f-708e125b3e71) {'id': '2f135e8c-a773-4b36-9c5f-708e125b3e71', 'created_at': datetime.datetime(2023, 10, 4, 2, 15, 43, 966289), 'updated_at': datetime.datetime(2023, 10, 4, 2, 15, 43, 966307)}"]
+(hbnb)
+```
+```
+(hbnb) all BaseModel
+["[BaseModel] (2f135e8c-a773-4b36-9c5f-708e125b3e71) {'id': '2f135e8c-a773-4b36-9c5f-708e125b3e71', 'created_at': datetime.datetime(2023, 10, 4, 2, 15, 43, 966289), 'updated_at': datetime.datetime(2023, 10, 4, 2, 15, 43, 966307)}"]
+(hbnb)
+```
+
 <h3>Alternative Syntax</h3>
 
-###### Example 0: Show all User objects
-Usage: <class_name>.all()
+###### Example 0: Show an instance
+Usage: <class_name>.show(<id>)
 ```
-(hbnb) User.all()
-["[User] (99f45908-1d17-46d1-9dd2-b7571128115b) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 34, 92071), 'id': '99f45908-1d17-46d1-9dd2-b7571128115b', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 34, 92056)}", "[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
+(hbnb) BaseModel.show(2f135e8c-a773-4b36-9c5f-708e125b3e71)
+[BaseModel] (2f135e8c-a773-4b36-9c5f-708e125b3e71) {'id': '2f135e8c-a773-4b36-9c5f-708e125b3e71', 'created_at': datetime.datetime(2023, 10, 4, 2, 15, 43, 966289), 'updated_at': datetime.datetime(2023, 10, 4, 2, 15, 43, 966307)}
+(hbnb)
 ```
 
-###### Example 1: Destroy a User
-Usage: <class_name>.destroy(<_id>)
+###### Example 1: Update an instance
+Usage: <class_name>.update(<id>, <param_name>, <param_value>)<br>OR<br><class_name>.update(<id>, <dict_param>)
 ```
-(hbnb) User.destroy("99f45908-1d17-46d1-9dd2-b7571128115b")
+(hbnb) BaseModel.update(2f135e8c-a773-4b36-9c5f-708e125b3e71, name, daniel)
+(hbnb) BaseModel.show(2f135e8c-a773-4b36-9c5f-708e125b3e71)
+[BaseModel] (2f135e8c-a773-4b36-9c5f-708e125b3e71) {'id': '2f135e8c-a773-4b36-9c5f-708e125b3e71', 'created_at': datetime.datetime(2023, 10, 4, 2, 15, 43, 966289), 'updated_at': datetime.datetime(2023, 10, 4, 2, 46, 38, 477036), 'name': 'daniel'}
 (hbnb)
-(hbnb) User.all()
-(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
 ```
-###### Example 2: Update User (by attribute)
-Usage: <class_name>.update(<_id>, <attribute_name>, <attribute_value>)
 ```
-(hbnb) User.update("98bea5de-9cb0-4d78-8a9d-c4de03521c30", name "Todd the Toad")
+(hbnb) BaseModel.update(2f135e8c-a773-4b36-9c5f-708e125b3e71, {'name', 'landon'})
+(hbnb) BaseModel.show(2f135e8c-a773-4b36-9c5f-708e125b3e71)
+[BaseModel] (2f135e8c-a773-4b36-9c5f-708e125b3e71) {'id': '2f135e8c-a773-4b36-9c5f-708e125b3e71', 'created_at': datetime.datetime(2023, 10, 4, 2, 15, 43, 966289), 'updated_at': datetime.datetime(2023, 10, 4, 2, 46, 38, 477036), 'name': 'landon'}
 (hbnb)
-(hbnb) User.all()
-(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'name': 'Todd the Toad', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
 ```
-###### Example 3: Update User (by dictionary)
-Usage: <class_name>.update(<_id>, <dictionary>)
+
+###### Example 2: Count an instance
+Usage: <class_name>.count(<id>)
 ```
-(hbnb) User.update("98bea5de-9cb0-4d78-8a9d-c4de03521c30", {'name': 'Fred the Frog', 'age': 9})
+(hbnb) BaseModel.count(2f135e8c-a773-4b36-9c5f-708e125b3e71)
+1
 (hbnb)
-(hbnb) User.all()
-(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'name': 'Fred the Frog', 'age': 9, 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
+```
+
+###### Example 3: Destroy an instance
+Usage: <class_name>.destroy(<id>)
+```
+(hbnb) BaseModel.destroy(2f135e8c-a773-4b36-9c5f-708e125b3e71)
+(hbnb) BaseModel.show(2f135e8c-a773-4b36-9c5f-708e125b3e71)
+** no instance found **
+(hbnb)
+```
+
+###### Example 4: Show all instances or all objects of a particular instance
+Usage: .all()<br>OR<br><class_name>.all()
+```
+(hbnb) .all()
+** no instance found **
+(hbnb)
+```
+```
+(hbnb) BaseModel.all()
+** no instance found **
+(hbnb)
 ```
 <br>
 
 <!-- ## Testing -->
 
-**NOTE:** Before you push any commit, please run the script `./test.bash` to ensure that no tests are failing and your code complies with this project's styling standard.
+**NOTE:** Before pushing any commit, please make sure to run `python3 -m unittest discover tests` to ensure that no tests are failing and your code complies with this project's styling standard.
