@@ -87,7 +87,7 @@ Usage: create `<class_name>`<br>OR<br>create `<class_name> <param_name>="<param_
 (hbnb)
 ```
 
-###### Example 1: Show an instance
+##### Example 1: Show an instance
 Usage: show `<class_name> <id>`
 ```
 (hbnb) show BaseModel 2f135e8c-a773-4b36-9c5f-708e125b3e71
@@ -99,7 +99,7 @@ Usage: show `<class_name> <id>`
 [BaseModel] (8b34cf2a-ab26-4a1f-a319-e28c9355220d) {'id': '8b34cf2a-ab26-4a1f-a319-e28c9355220d', 'created_at': datetime.datetime(2023, 10, 4, 2, 16, 44, 7206), 'updated_at': datetime.datetime(2023, 10, 4, 2, 16, 44, 7229), 'name': 'John'}
 ```
 
-###### Example 2: Update an instance
+##### Example 2: Update an instance
 Usage: update `<class_name> <id> <param_name> <param_value>`<br>OR<br>update `<class_name> <id> <dict_param>`
 ```
 (hbnb) update BaseModel 8b34cf2a-ab26-4a1f-a319-e28c9355220d name santa
@@ -114,7 +114,7 @@ Usage: update `<class_name> <id> <param_name> <param_value>`<br>OR<br>update `<c
 (hbnb)
 ```
 
-###### Example 3: Destroy an instance
+##### Example 3: Destroy an instance
 Usage: destroy `<class_name> <id>`
 ```
 (hbnb) destroy BaseModel 8b34cf2a-ab26-4a1f-a319-e28c9355220d
@@ -123,7 +123,7 @@ Usage: destroy `<class_name> <id>`
 (hbnb)
 ```
 
-###### Example 4: Count an instance
+##### Example 4: Count an instance
 Usage: count `<class_name>`
 ```
 (hbnb) count BaseModel
@@ -131,7 +131,7 @@ Usage: count `<class_name>`
 (hbnb)
 ```
 
-###### Example 5: Show all instances or all objects of a particular instance
+##### Example 5: Show all instances or all objects of a particular instance
 Usage: all<br>OR<br>all `<class_name>`
 ```
 (hbnb) all
@@ -146,7 +146,7 @@ Usage: all<br>OR<br>all `<class_name>`
 
 <h3>Alternative Syntax</h3>
 
-###### Example 0: Show an instance
+##### Example 0: Show an instance
 Usage: `<class_name>`.show(`<id>`)
 ```
 (hbnb) BaseModel.show(2f135e8c-a773-4b36-9c5f-708e125b3e71)
@@ -154,7 +154,7 @@ Usage: `<class_name>`.show(`<id>`)
 (hbnb)
 ```
 
-###### Example 1: Update an instance
+##### Example 1: Update an instance
 Usage: `<class_name>`.update(`<id>`, `<param_name>`, `<param_value>`)<br>OR<br>`<class_name>`.update(`<id>`, `<dict_param>`)
 ```
 (hbnb) BaseModel.update(2f135e8c-a773-4b36-9c5f-708e125b3e71, name, daniel)
@@ -169,7 +169,7 @@ Usage: `<class_name>`.update(`<id>`, `<param_name>`, `<param_value>`)<br>OR<br>`
 (hbnb)
 ```
 
-###### Example 2: Count an instance
+##### Example 2: Count an instance
 Usage: `<class_name>`.count(`<id>`)
 ```
 (hbnb) BaseModel.count(2f135e8c-a773-4b36-9c5f-708e125b3e71)
@@ -177,7 +177,7 @@ Usage: `<class_name>`.count(`<id>`)
 (hbnb)
 ```
 
-###### Example 3: Destroy an instance
+##### Example 3: Destroy an instance
 Usage: `<class_name>`.destroy(`<id>`)
 ```
 (hbnb) BaseModel.destroy(2f135e8c-a773-4b36-9c5f-708e125b3e71)
@@ -186,7 +186,7 @@ Usage: `<class_name>`.destroy(`<id>`)
 (hbnb)
 ```
 
-###### Example 4: Show all instances or all objects of a particular instance
+##### Example 4: Show all instances or all objects of a particular instance
 Usage: .all()<br>OR<br>`<class_name>`.all()
 ```
 (hbnb) .all()
