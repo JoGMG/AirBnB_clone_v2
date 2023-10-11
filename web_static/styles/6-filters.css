@@ -1,8 +1,6 @@
-/* search bar */
 div.container {
     max-width: 1000px;
     margin: 30px auto;
-    /* text-align: center; */
 }
 
 section.filters {
@@ -59,6 +57,10 @@ section.filters .amenities {
     margin-bottom: 0px;
     text-align: left;
     margin-left: 30px;
+    white-space: nowrap;
+    width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* display location and amenities options upon hover */
@@ -73,6 +75,7 @@ section.filters .amenities {
 
 .popover h2 {
     font-size: 16px;
+    margin-left: 0px;
 }
 
 li {

@@ -27,9 +27,9 @@ button:hover {
 }
 
 .locations,
-section.filters .amenities {
+.amenities {
     height: 100%;
-    width: 25%;
+    width: 30%;
     float: left;
 }
 
@@ -47,12 +47,16 @@ section.filters .amenities {
     font-size: 14px;
     margin: 0px 0px 0px 30px;
     text-align: left;
+    white-space: nowrap;
+    width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .popover {
     display: none;
     background-color: #FAFAFA;
-    border: 1px solid #DDDDDD;
+    border: 1px solid hsl(0, 0%, 87%);
     border-radius: 4px;
     position: relative;
     z-index: 1;
@@ -66,6 +70,7 @@ section.filters .amenities {
 .popover h2 {
     font-size: 16px;
     margin-bottom: 10px;
+    margin-left: 15px;
 }
 
 li {
@@ -75,42 +80,14 @@ li {
 .popover li {
     margin-top: 10px;
     margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+.locations .popover li {
+    margin-left: -5px;
 }
 
 .locations:hover .popover,
 .amenities:hover .popover {
     display: block;
-}
-
-/* Responsive design elements for smaller screens */
-@media (max-width: 632px) {
-    section.filters {
-        height: 85px;
-    }
-
-    button {
-        width: 25%;
-        margin: 18px 30px;
-    }
-
-    .locations,
-    section.filters .amenities {
-        width: 25%;
-    }
-}
-
-@media (min-width: 632px) and (max-width: 769px) {
-    section.filters {
-        height: 70px;
-    }
-
-    button {
-        width: 20%;
-        margin: 11px 30px;
-    }
-
-    .locations,
-    section.filters .amenities {
-        width: 30%;
-    }
 }

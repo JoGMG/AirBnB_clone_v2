@@ -47,12 +47,14 @@ div.information {
 div.max_guest,
 div.number_rooms,
 div.number_bathrooms {
-  line-height: 140px;
+  line-height: 130px;
   width: 100px;
   height: 100%;
   display: inline-block;
+  position: relative;
   background-position: 50% 5px;
   background-repeat: no-repeat;
+  left: 30px;
 }
 
 .max_guest {

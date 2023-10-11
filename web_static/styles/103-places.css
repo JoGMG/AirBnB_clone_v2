@@ -138,3 +138,14 @@ div.description {
 .places div.reviews p {
     font-size: 12px;
 }
+
+.places div.reviews span {
+    font-size: 14px;
+    color: white;
+    background-color: #FF5A5F;
+    border-radius: 8px;
+    padding: 7px 10px;
+    position: relative;
+    float: right;
+    bottom: 3px;
+}
