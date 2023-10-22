@@ -84,10 +84,12 @@ class HBNBCommand(cmd.Cmd):
                         # _args = _args.replace('\"', '')
 
             # if command is all or count
-            if _cmd == HBNBCommand.dot_cmds[0] or _cmd == HBNBCommand.dot_cmds[1]:
+            if _cmd == HBNBCommand.dot_cmds[0] or \
+                    _cmd == HBNBCommand.dot_cmds[1]:
                 line = ' '.join([_cmd, _cls])
             # if command is show or destroy
-            if _cmd == HBNBCommand.dot_cmds[2] or _cmd == HBNBCommand.dot_cmds[3]:
+            if _cmd == HBNBCommand.dot_cmds[2] or \
+                    _cmd == HBNBCommand.dot_cmds[3]:
                 line = ' '.join([_cmd, _cls, _id])
             # if command is update
             if _cmd == HBNBCommand.dot_cmds[4]:
@@ -157,9 +159,11 @@ class HBNBCommand(cmd.Cmd):
                         obj_kwargs[key_name] = int(int_v)
                     if str_v is not None:
                         if '_' in str_v:
-                            obj_kwargs[key_name] = str_v[1:-1].replace('_', ' ')
+                            obj_kwargs[key_name] = \
+                                str_v[1:-1].replace('_', ' ')
                         elif '\\"' or "\\'" in str_v:
-                            obj_kwargs[key_name] = str_v[1:-1].replace('\\', '')
+                            obj_kwargs[key_name] = \
+                                str_v[1:-1].replace('\\', '')
                         else:
                             obj_kwargs[key_name] = str_v[1:-1]
         else:
@@ -282,11 +286,10 @@ class HBNBCommand(cmd.Cmd):
         else:
             print(class_objects)
 
-        
-
     def help_all(self):
         """ Help information for the all command """
-        print("Shows all instances or all the instances of an individual class")
+        print("Shows all instances or all the instances of \
+              an individual class")
         print("(*) means required")
         print("[Usage]: all <class_name>\n")
 
@@ -300,7 +303,7 @@ class HBNBCommand(cmd.Cmd):
         if c_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        
+
         count = 0
         for k, v in storage.all().items():
             if c_name == k.split('.')[0]:
@@ -392,7 +395,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** parameter name and value missing **")
                 return
-            
+
             args = [param_name, param_val]
 
         # retrieve dictionary of current objects
@@ -416,7 +419,8 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates a parameter of an instance with new information")
         print("(*) means required")
-        print("Usage: update <class_name>* <instance_id>* (<param_name>* <param_value> or <dict_param>)*\n")
+        print("Usage: update <class_name>* <instance_id>* \
+              (<param_name>* <param_value> or <dict_param>)*\n")
 
 
 if __name__ == "__main__":
