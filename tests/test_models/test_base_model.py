@@ -110,19 +110,22 @@ class TestBasemodel(unittest.TestCase):
         }
         self.assertDictEqual(mdl.to_dict(), to_dict)
         if os.getenv('HBNB_TYPE_STORAGE') != 'db':
+            items = self.value(id='u-b34', age=13).to_dict()
+            items.pop('id')
+            items.pop('created_at')
+            items.pop('updated_at')
             self.assertDictEqual(
-                self.value(id='u-b34', age=13).to_dict(),
+                items,
                 {
                     '__class__': mdl.__class__.__name__,
-                    'id': 'u-b34',
                     'age': 13
                 }
             )
+            items['age'] = None
             self.assertDictEqual(
-                self.value(id='u-b34', age=None).to_dict(),
+                items,
                 {
                     '__class__': mdl.__class__.__name__,
-                    'id': 'u-b34',
                     'age': None
                 }
             )
